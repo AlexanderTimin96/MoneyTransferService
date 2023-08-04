@@ -50,7 +50,7 @@ public class MoneyTransferRepositoryImpl implements MoneyTransferRepository {
     @Override
     public TransferOperation findOperation(int id) {
         if (!moneyTransferOperations.containsKey(id)) {
-            throw new InputDataException("This transfer request is missing");
+            throw new InputDataException("Данного запроса на перевод не существует");
         }
         return moneyTransferOperations.get(id);
     }
