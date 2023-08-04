@@ -2,8 +2,8 @@ package ru.netology.moneyTransferService.controller;
 
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.netology.moneyTransferService.model.response.request.RequestForConfirmOperation;
-import ru.netology.moneyTransferService.model.response.request.RequestForMoneyTransfer;
+import ru.netology.moneyTransferService.model.request.RequestForConfirmOperation;
+import ru.netology.moneyTransferService.model.request.RequestForMoneyTransfer;
 import ru.netology.moneyTransferService.model.response.ResponseTransfer;
 import ru.netology.moneyTransferService.service.MoneyTransferService;
 

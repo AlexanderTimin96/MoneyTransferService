@@ -5,17 +5,17 @@ import org.springframework.stereotype.Service;
 import ru.netology.moneyTransferService.checker.OperationChecker;
 import ru.netology.moneyTransferService.model.card.Card;
 import ru.netology.moneyTransferService.model.operation.TransferOperation;
-import ru.netology.moneyTransferService.model.response.request.RequestForConfirmOperation;
-import ru.netology.moneyTransferService.model.response.request.RequestForMoneyTransfer;
+import ru.netology.moneyTransferService.model.request.RequestForConfirmOperation;
+import ru.netology.moneyTransferService.model.request.RequestForMoneyTransfer;
 import ru.netology.moneyTransferService.model.response.ResponseTransfer;
 import ru.netology.moneyTransferService.repository.MoneyTransferRepository;
 
 @Service
 public class MoneyTransferServiceImpl implements MoneyTransferService {
-    @Value("${commission}")
+    @Value("${commission:0.01}")
     private double COMMISSION;
-    @Value("${confirmCode}")
-    private final String CONFIRM_CODE = "0000";
+    @Value("${confirmCode:0000}")
+    private String CONFIRM_CODE;
 
     private final MoneyTransferRepository moneyTransferRepository;
     private final OperationChecker checker;

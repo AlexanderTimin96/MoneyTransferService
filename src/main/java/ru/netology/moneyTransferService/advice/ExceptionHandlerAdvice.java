@@ -1,28 +1,27 @@
 package ru.netology.moneyTransferService.advice;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.netology.moneyTransferService.exceptions.CardIsExpiredException;
 import ru.netology.moneyTransferService.exceptions.InputDataException;
 import ru.netology.moneyTransferService.exceptions.InvalidTransactionExceptions;
+import ru.netology.moneyTransferService.model.response.ResponseException;
 
 @RestControllerAdvice
 public class ExceptionHandlerAdvice {
     @ExceptionHandler(CardIsExpiredException.class)
-    public ResponseEntity<String> CardIsExpiredUserHandler(CardIsExpiredException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ResponseException> handleCardIsExpiredUserHandler(CardIsExpiredException e) {
+        return ResponseEntity.badRequest().body(new ResponseException(e.getMessage()));
     }
 
     @ExceptionHandler(InputDataException.class)
-    public ResponseEntity<String> InputDataHandler(InputDataException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ResponseException> handleInputDataHandler(InputDataException e) {
+        return ResponseEntity.badRequest().body(new ResponseException(e.getMessage()));
     }
 
     @ExceptionHandler(InvalidTransactionExceptions.class)
-    public ResponseEntity<String> InvalidTransactionHandler(InvalidTransactionExceptions e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ResponseException> handleInvalidTransactionHandler(InvalidTransactionExceptions e) {
+        return ResponseEntity.badRequest().body(new ResponseException(e.getMessage()));
     }
-
 }

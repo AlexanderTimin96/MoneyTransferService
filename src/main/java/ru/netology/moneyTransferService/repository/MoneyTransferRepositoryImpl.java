@@ -37,7 +37,7 @@ public class MoneyTransferRepositoryImpl implements MoneyTransferRepository {
 
     public Card findCardsInStorage(String number) {
         if (!cardStorage.containsKey(number)) {
-            throw new InputDataException("Incorrect card " + number + " number");
+            throw new InputDataException("Карта с номером " + number + " не зарегистрирована");
         }
         return cardStorage.get(number);
     }
