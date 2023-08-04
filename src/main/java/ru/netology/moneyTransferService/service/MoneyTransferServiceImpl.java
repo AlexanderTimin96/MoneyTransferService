@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 import ru.netology.moneyTransferService.checker.OperationChecker;
 import ru.netology.moneyTransferService.model.card.Card;
 import ru.netology.moneyTransferService.model.operation.TransferOperation;
-import ru.netology.moneyTransferService.model.request.RequestForConfirmOperation;
-import ru.netology.moneyTransferService.model.request.RequestForMoneyTransfer;
+import ru.netology.moneyTransferService.model.response.request.RequestForConfirmOperation;
+import ru.netology.moneyTransferService.model.response.request.RequestForMoneyTransfer;
 import ru.netology.moneyTransferService.model.response.ResponseTransfer;
 import ru.netology.moneyTransferService.repository.MoneyTransferRepository;
 

@@ -1,4 +1,4 @@
-package ru.netology.moneyTransferService.model.request;
+package ru.netology.moneyTransferService.model.response.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

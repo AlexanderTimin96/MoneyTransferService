@@ -6,7 +6,7 @@ import ru.netology.moneyTransferService.exceptions.InputDataException;
 import ru.netology.moneyTransferService.exceptions.InvalidTransactionExceptions;
 import ru.netology.moneyTransferService.model.card.Card;
 import ru.netology.moneyTransferService.model.operation.TransferOperation;
-import ru.netology.moneyTransferService.model.request.RequestForMoneyTransfer;
+import ru.netology.moneyTransferService.model.response.request.RequestForMoneyTransfer;
 
 import java.util.Calendar;
 import java.util.Date;
