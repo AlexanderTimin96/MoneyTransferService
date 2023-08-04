@@ -1,8 +1,14 @@
-package ru.netology.moneyTransferService.model.requestObject;
+package ru.netology.moneyTransferService.model.request;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 public class RequestForConfirmOperation {
-    private String operationId;
-    private String code;
+    @NotBlank
+    private final String operationId;
+    @NotBlank
+    @Size(min = 4, max = 4)
+    private final String code;
 
     public RequestForConfirmOperation(String operationId, String code) {
         this.operationId = operationId;

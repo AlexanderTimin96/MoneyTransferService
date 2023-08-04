@@ -6,7 +6,7 @@ import ru.netology.moneyTransferService.exceptions.InputDataException;
 import ru.netology.moneyTransferService.exceptions.InvalidTransactionExceptions;
 import ru.netology.moneyTransferService.model.card.Card;
 import ru.netology.moneyTransferService.model.operation.TransferOperation;
-import ru.netology.moneyTransferService.model.requestObject.RequestForMoneyTransfer;
+import ru.netology.moneyTransferService.model.request.RequestForMoneyTransfer;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -55,12 +55,6 @@ public class OperationChecker {
         }
     }
 
-    public void checkCode(Card card, String code) {
-        if (!card.getCode().equals(code)) {
-            throw new InvalidTransactionExceptions("Incorrect code");
-        }
-    }
-
     public void checkAmountForReduceValue(TransferOperation operation) {
         if (operation.getCardFrom().getValue().compareTo(operation.getValueForReduce()) < 0) {
             throw new InvalidTransactionExceptions("Insufficient funds for transfer");
@@ -71,5 +65,12 @@ public class OperationChecker {
         if (operation.isOperationSuccessful()) {
             throw new InvalidTransactionExceptions("The operation has already been performed");
         }
+    }
+
+    public void checkCode(String code, String confirmCode) {
+        if (!code.equals(confirmCode)) {
+            throw new InvalidTransactionExceptions("Not confirm operation");
+        }
+
     }
 }

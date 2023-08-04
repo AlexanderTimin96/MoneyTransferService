@@ -11,11 +11,11 @@ public class TransferOperation {
     private final BigDecimal valueForReduce;
     private boolean isOperationSuccessful;
 
-    public TransferOperation(Card cardFrom, Card cardTo, BigDecimal value, BigDecimal commission) {
+    public TransferOperation(Card cardFrom, Card cardTo, BigDecimal value, double commission) {
         this.cardFrom = cardFrom;
         this.cardTo = cardTo;
         this.valueForIncrease = value;
-        valueForReduce = commission.multiply(value);
+        valueForReduce = new BigDecimal(commission).multiply(value);
     }
 
     public BigDecimal getValueForReduce() {

@@ -1,9 +1,13 @@
 package ru.netology.moneyTransferService.controller;
 
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-import ru.netology.moneyTransferService.model.requestObject.RequestForConfirmOperation;
-import ru.netology.moneyTransferService.model.requestObject.RequestForMoneyTransfer;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import ru.netology.moneyTransferService.model.request.RequestForConfirmOperation;
+import ru.netology.moneyTransferService.model.request.RequestForMoneyTransfer;
+import ru.netology.moneyTransferService.model.response.ResponseTransfer;
 import ru.netology.moneyTransferService.service.MoneyTransferService;
 
 @RestController
@@ -16,12 +20,12 @@ public class MoneyTransferController {
     }
 
     @PostMapping("transfer")
-    public String transferMoney(@RequestBody @Validated RequestForMoneyTransfer moneyTransferOperation) {
+    public ResponseTransfer transferMoney(@RequestBody @Validated RequestForMoneyTransfer moneyTransferOperation) {
         return moneyTransferService.transferMoney(moneyTransferOperation);
     }
 
     @PostMapping("confirmOperation")
-    public String confirmOperation(@RequestBody RequestForConfirmOperation requestForConfirmOperation) {
+    public ResponseTransfer confirmOperation(@RequestBody @Validated RequestForConfirmOperation requestForConfirmOperation) {
         return moneyTransferService.confirmOperation(requestForConfirmOperation);
     }
 }

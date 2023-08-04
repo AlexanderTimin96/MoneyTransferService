@@ -1,18 +1,22 @@
 package ru.netology.moneyTransferService.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.netology.moneyTransferService.checker.OperationChecker;
 import ru.netology.moneyTransferService.model.card.Card;
 import ru.netology.moneyTransferService.model.operation.TransferOperation;
-import ru.netology.moneyTransferService.model.requestObject.RequestForConfirmOperation;
-import ru.netology.moneyTransferService.model.requestObject.RequestForMoneyTransfer;
+import ru.netology.moneyTransferService.model.request.RequestForConfirmOperation;
+import ru.netology.moneyTransferService.model.request.RequestForMoneyTransfer;
+import ru.netology.moneyTransferService.model.response.ResponseTransfer;
 import ru.netology.moneyTransferService.repository.MoneyTransferRepository;
-
-import java.math.BigDecimal;
 
 @Service
 public class MoneyTransferServiceImpl implements MoneyTransferService {
-    private final BigDecimal commission = new BigDecimal(0.01);
+    @Value("${commission}")
+    private double COMMISSION;
+    @Value("${confirmCode}")
+    private final String CONFIRM_CODE = "0000";
+
     private final MoneyTransferRepository moneyTransferRepository;
     private final OperationChecker checker;
 
@@ -22,29 +26,29 @@ public class MoneyTransferServiceImpl implements MoneyTransferService {
     }
 
     @Override
-    public String transferMoney(RequestForMoneyTransfer requestForMoneyTransfer) {
+    public ResponseTransfer transferMoney(RequestForMoneyTransfer requestForMoneyTransfer) {
         Card cardFrom = moneyTransferRepository.findCardsInStorage(requestForMoneyTransfer.getCardFromNumber());
         Card cardTo = moneyTransferRepository.findCardsInStorage(requestForMoneyTransfer.getCardToNumber());
 
         checker.checkingDataEntryCard(cardFrom, requestForMoneyTransfer);
         checker.checkOperation(cardFrom, cardTo);
         TransferOperation operation = new TransferOperation(cardFrom, cardTo,
-                requestForMoneyTransfer.getValue(), commission);
+                requestForMoneyTransfer.getValue(), COMMISSION);
         checker.checkAmountForReduceValue(operation);
 
         return moneyTransferRepository.saveOperation(operation);
     }
 
     @Override
-    public String confirmOperation(RequestForConfirmOperation requestForConfirmOperation) {
-        int ID = Integer.parseInt(requestForConfirmOperation.getOperationId());
-        TransferOperation operation = moneyTransferRepository.findOperation(ID);
+    public ResponseTransfer confirmOperation(RequestForConfirmOperation requestForConfirmOperation) {
+        int id = Integer.parseInt(requestForConfirmOperation.getOperationId());
+        TransferOperation operation = moneyTransferRepository.findOperation(id);
 
         checker.checkCompleteOperation(operation);
-        checker.checkCode(operation.getCardFrom(), requestForConfirmOperation.getCode());
+        checker.checkCode(requestForConfirmOperation.getCode(), CONFIRM_CODE);
 
         makeMoneyTransfer(operation);
-        return requestForConfirmOperation.getOperationId();
+        return new ResponseTransfer(requestForConfirmOperation.getOperationId());
     }
 
     private void makeMoneyTransfer(TransferOperation operation) {
