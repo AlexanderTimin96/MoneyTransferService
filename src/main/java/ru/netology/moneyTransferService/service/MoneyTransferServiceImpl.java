@@ -3,6 +3,9 @@ package ru.netology.moneyTransferService.service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.netology.moneyTransferService.checker.OperationChecker;
+import ru.netology.moneyTransferService.exceptions.InputDataException;
+import ru.netology.moneyTransferService.exceptions.InvalidTransactionExceptions;
+import ru.netology.moneyTransferService.logger.TransferLogger;
 import ru.netology.moneyTransferService.model.card.Card;
 import ru.netology.moneyTransferService.model.operation.TransferOperation;
 import ru.netology.moneyTransferService.model.request.RequestForConfirmOperation;
@@ -10,31 +13,62 @@ import ru.netology.moneyTransferService.model.request.RequestForMoneyTransfer;
 import ru.netology.moneyTransferService.model.response.ResponseTransfer;
 import ru.netology.moneyTransferService.repository.MoneyTransferRepository;
 
+import java.util.Optional;
+
 @Service
 public class MoneyTransferServiceImpl implements MoneyTransferService {
-    @Value("${commission:0.01}")
+    @Value("${commission}")
     private double COMMISSION;
-    @Value("${confirmCode:0000}")
+    @Value("${confirmCode}")
     private String CONFIRM_CODE;
 
     private final MoneyTransferRepository moneyTransferRepository;
     private final OperationChecker checker;
+    private final TransferLogger logger;
 
-    public MoneyTransferServiceImpl(MoneyTransferRepository moneyTransferRepository, OperationChecker checker) {
+    public MoneyTransferServiceImpl(MoneyTransferRepository moneyTransferRepository, OperationChecker checker,
+                                    TransferLogger logger) {
         this.moneyTransferRepository = moneyTransferRepository;
         this.checker = checker;
+        this.logger = logger;
+        logger.createFileLog();
     }
 
     @Override
     public ResponseTransfer transferMoney(RequestForMoneyTransfer requestForMoneyTransfer) {
-        Card cardFrom = moneyTransferRepository.findCardsInStorage(requestForMoneyTransfer.getCardFromNumber());
-        Card cardTo = moneyTransferRepository.findCardsInStorage(requestForMoneyTransfer.getCardToNumber());
+        Optional<Card> optionalCardFrom = moneyTransferRepository.findCardsInStorage(requestForMoneyTransfer.getCardFromNumber());
+        Optional<Card> optionalCardTo = moneyTransferRepository.findCardsInStorage(requestForMoneyTransfer.getCardToNumber());
 
-        checker.checkingDataEntryCard(cardFrom, requestForMoneyTransfer);
-        checker.checkOperation(cardFrom, cardTo);
+        if (optionalCardFrom.isEmpty() || optionalCardTo.isEmpty()) {
+            throwInputDataException(requestForMoneyTransfer, "Введенные данные карт некорректные!");
+        }
+        Card cardFrom = optionalCardFrom.get();
+        Card cardTo = optionalCardTo.get();
+
+        if (!checker.checkDataEntryCard(cardFrom, requestForMoneyTransfer)) {
+            String str = "Введенные данные карт некорректные!";
+            throwInputDataException(requestForMoneyTransfer, str);
+        }
+        if (!checker.checkValidTill(cardFrom)) {
+            String str = "Срок действия карты отправителя истек!";
+            throwInvalidTransactionExceptions(requestForMoneyTransfer, str);
+        }
+        if (!checker.checkValidTill(cardTo)) {
+            String str = "Срок действия карты получателя истек!";
+            throwInvalidTransactionExceptions(requestForMoneyTransfer, str);
+        }
+        if (!checker.checkCurrency(cardFrom, cardFrom)) {
+            String str = "Карты имеют счета в разных валютах!";
+            throwInvalidTransactionExceptions(requestForMoneyTransfer, str);
+        }
+
         TransferOperation operation = new TransferOperation(cardFrom, cardTo,
                 requestForMoneyTransfer.getValue(), COMMISSION);
-        checker.checkAmountForReduceValue(operation);
+
+        if (!checker.checkAmountForReduceValue(operation)) {
+            String str = "Недостаточно средств для перевода!";
+            throwInvalidTransactionExceptions(operation, str);
+        }
 
         return moneyTransferRepository.saveOperation(operation);
     }
@@ -44,8 +78,14 @@ public class MoneyTransferServiceImpl implements MoneyTransferService {
         int id = Integer.parseInt(requestForConfirmOperation.getOperationId());
         TransferOperation operation = moneyTransferRepository.findOperation(id);
 
-        checker.checkCompleteOperation(operation);
-        checker.checkCode(requestForConfirmOperation.getCode(), CONFIRM_CODE);
+        if (checker.checkCompleteOperation(operation)) {
+            String str = "Операция была выполнена ранее!";
+            throwInvalidTransactionExceptions(operation, str);
+        }
+        if (!checker.checkCode(requestForConfirmOperation.getCode(), CONFIRM_CODE)) {
+            String str = "Код подтверждения операции неверный!";
+            throwInvalidTransactionExceptions(operation, str);
+        }
 
         makeMoneyTransfer(operation);
         return new ResponseTransfer(requestForConfirmOperation.getOperationId());
@@ -59,5 +99,21 @@ public class MoneyTransferServiceImpl implements MoneyTransferService {
         cardTo.increaseValue(operation.getValueForIncrease());
 
         operation.setOperationSuccessful(true);
+        logger.logSuccessfulOperation(operation);
+    }
+
+    private void throwInputDataException(RequestForMoneyTransfer requestForMoneyTransfer, String str) {
+        logger.logInvalidRequest(requestForMoneyTransfer, str);
+        throw new InputDataException(str);
+    }
+
+    private void throwInvalidTransactionExceptions(RequestForMoneyTransfer requestForMoneyTransfer, String str) {
+        logger.logInvalidRequest(requestForMoneyTransfer, str);
+        throw new InvalidTransactionExceptions(str);
+    }
+
+    private void throwInvalidTransactionExceptions(TransferOperation operation, String str) {
+        logger.logOperationCancel(operation, str);
+        throw new InvalidTransactionExceptions(str);
     }
 }

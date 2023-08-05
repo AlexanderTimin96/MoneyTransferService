@@ -15,11 +15,7 @@ public class TransferOperation {
         this.cardFrom = cardFrom;
         this.cardTo = cardTo;
         this.valueForIncrease = value;
-        valueForReduce = new BigDecimal(commission).multiply(value);
-    }
-
-    public BigDecimal getValueForReduce() {
-        return valueForReduce;
+        valueForReduce = new BigDecimal(commission + 1).multiply(value);
     }
 
     public Card getCardFrom() {
@@ -32,6 +28,10 @@ public class TransferOperation {
 
     public BigDecimal getValueForIncrease() {
         return valueForIncrease;
+    }
+
+    public BigDecimal getValueForReduce() {
+        return valueForReduce;
     }
 
     public boolean isOperationSuccessful() {

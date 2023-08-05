@@ -1,9 +1,6 @@
 package ru.netology.moneyTransferService.checker;
 
 import org.springframework.stereotype.Component;
-import ru.netology.moneyTransferService.exceptions.CardIsExpiredException;
-import ru.netology.moneyTransferService.exceptions.InputDataException;
-import ru.netology.moneyTransferService.exceptions.InvalidTransactionExceptions;
 import ru.netology.moneyTransferService.model.card.Card;
 import ru.netology.moneyTransferService.model.operation.TransferOperation;
 import ru.netology.moneyTransferService.model.request.RequestForMoneyTransfer;
@@ -13,63 +10,41 @@ import java.util.Date;
 
 @Component
 public class OperationChecker {
-    public void checkOperation(Card cardFrom, Card cardTo) {
-        checkForEquality(cardFrom, cardTo);
-        checkValidTill(cardFrom);
-        checkValidTill(cardTo);
-        checkCurrency(cardFrom, cardTo);
-    }
-
-    public void checkingDataEntryCard(Card card, RequestForMoneyTransfer requestForMoneyTransfer) {
+    public boolean checkDataEntryCard(Card card, RequestForMoneyTransfer requestForMoneyTransfer) {
         if (card.getValidTill().compareTo(requestForMoneyTransfer.getCardFromValidTill()) != 0) {
-            throw new InputDataException("Срок действия карты "
-                    + card.getNumber() + " некорректный");
+            return false;
         }
         if (!card.getCVC().equals(requestForMoneyTransfer.getCardFromCVV())) {
-            throw new InputDataException("Код CVV карты " + card.getNumber() + " некорректный");
+            return false;
         }
-
         if (!card.getCurrency().equals(requestForMoneyTransfer.getCurrency())) {
-            throw new InputDataException("Карта " + card.getNumber() + " имеет валюту счета "
-                    + card.getCurrency());
+            return false;
         }
+        if (card.getNumber().equals(requestForMoneyTransfer.getCardToNumber())) {
+            return false;
+        }
+        return true;
     }
 
-    private void checkForEquality(Card card1, Card card2) {
-        if (card1.equals(card2)) {
-            throw new InputDataException("Карта списания и перевода совпадают");
-        }
-    }
-
-    private void checkValidTill(Card card) {
+    public boolean checkValidTill(Card card) {
         Calendar cal = Calendar.getInstance();
         Date today = cal.getTime();
-        if (card.getValidTill().before(today)) {
-            throw new CardIsExpiredException("Карта " + card.getNumber() + " просрочена");
-        }
+        return card.getValidTill().after(today);
     }
 
-    private void checkCurrency(Card card1, Card card2) {
-        if (!card1.getCurrency().equals(card2.getCurrency())) {
-            throw new InvalidTransactionExceptions("Карты имеют счета в разных валютах");
-        }
+    public boolean checkCurrency(Card card1, Card card2) {
+        return card1.getCurrency().equals(card2.getCurrency());
     }
 
-    public void checkAmountForReduceValue(TransferOperation operation) {
-        if (operation.getCardFrom().getValue().compareTo(operation.getValueForReduce()) < 0) {
-            throw new InvalidTransactionExceptions("Недостаточно средств для перевода");
-        }
+    public boolean checkAmountForReduceValue(TransferOperation operation) {
+        return operation.getCardFrom().getValue().compareTo(operation.getValueForReduce()) >= 0;
     }
 
-    public void checkCompleteOperation(TransferOperation operation) {
-        if (operation.isOperationSuccessful()) {
-            throw new InvalidTransactionExceptions("Операция уже была выполнена");
-        }
+    public boolean checkCompleteOperation(TransferOperation operation) {
+        return operation.isOperationSuccessful();
     }
 
-    public void checkCode(String code, String confirmCode) {
-        if (!code.equals(confirmCode)) {
-            throw new InvalidTransactionExceptions("Код подтверждения неверный");
-        }
+    public boolean checkCode(String code, String confirmCode) {
+        return code.equals(confirmCode);
     }
 }

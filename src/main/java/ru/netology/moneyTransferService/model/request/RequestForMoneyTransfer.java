@@ -22,7 +22,6 @@ public class RequestForMoneyTransfer {
     private final String cardToNumber;
     private final Amount amount;
 
-
     public RequestForMoneyTransfer(String cardFromNumber, String cardFromValidTill, String cardFromCVV,
                                    String cardToNumber, Amount amount) {
         this.cardFromNumber = cardFromNumber;

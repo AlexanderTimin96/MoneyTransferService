@@ -3,17 +3,12 @@ package ru.netology.moneyTransferService.advice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.netology.moneyTransferService.exceptions.CardIsExpiredException;
 import ru.netology.moneyTransferService.exceptions.InputDataException;
 import ru.netology.moneyTransferService.exceptions.InvalidTransactionExceptions;
 import ru.netology.moneyTransferService.model.response.ResponseException;
 
 @RestControllerAdvice
 public class ExceptionHandlerAdvice {
-    @ExceptionHandler(CardIsExpiredException.class)
-    public ResponseEntity<ResponseException> handleCardIsExpiredUserHandler(CardIsExpiredException e) {
-        return ResponseEntity.badRequest().body(new ResponseException(e.getMessage()));
-    }
 
     @ExceptionHandler(InputDataException.class)
     public ResponseEntity<ResponseException> handleInputDataHandler(InputDataException e) {

@@ -2,13 +2,16 @@ package ru.netology.moneyTransferService.repository;
 
 import org.springframework.stereotype.Repository;
 import ru.netology.moneyTransferService.exceptions.InputDataException;
+import ru.netology.moneyTransferService.logger.TransferLogger;
 import ru.netology.moneyTransferService.model.card.Card;
 import ru.netology.moneyTransferService.model.operation.TransferOperation;
 import ru.netology.moneyTransferService.model.response.ResponseTransfer;
 
+import javax.swing.text.html.Option;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -35,11 +38,8 @@ public class MoneyTransferRepositoryImpl implements MoneyTransferRepository {
         cardStorage.put(card4.getNumber(), card3);
     }
 
-    public Card findCardsInStorage(String number) {
-        if (!cardStorage.containsKey(number)) {
-            throw new InputDataException("Карта с номером " + number + " не зарегистрирована");
-        }
-        return cardStorage.get(number);
+    public Optional<Card> findCardsInStorage(String number) {
+        return Optional.ofNullable(cardStorage.get(number));
     }
 
     public ResponseTransfer saveOperation(TransferOperation transferOperation) {

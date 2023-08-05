@@ -1,7 +1,5 @@
 package ru.netology.moneyTransferService.model.card;
 
-import com.sun.jdi.event.StepEvent;
-
 import java.math.BigDecimal;
 
 public class Amount {
@@ -9,7 +7,7 @@ public class Amount {
     private BigDecimal value;
 
     public Amount(BigDecimal value, String currency) {
-       this.value = value;
+        this.value = value;
         this.currency = currency;
     }
 
