@@ -3,9 +3,11 @@ package ru.netology.moneyTransferService.service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.netology.moneyTransferService.checker.OperationChecker;
+import ru.netology.moneyTransferService.checker.OperationCheckerImpl;
 import ru.netology.moneyTransferService.exceptions.InputDataException;
 import ru.netology.moneyTransferService.exceptions.InvalidTransactionExceptions;
 import ru.netology.moneyTransferService.logger.TransferLogger;
+import ru.netology.moneyTransferService.logger.TransferLoggerImpl;
 import ru.netology.moneyTransferService.model.card.Card;
 import ru.netology.moneyTransferService.model.operation.TransferOperation;
 import ru.netology.moneyTransferService.model.request.RequestForConfirmOperation;
@@ -26,8 +28,8 @@ public class MoneyTransferServiceImpl implements MoneyTransferService {
     private final OperationChecker checker;
     private final TransferLogger logger;
 
-    public MoneyTransferServiceImpl(MoneyTransferRepository moneyTransferRepository, OperationChecker checker,
-                                    TransferLogger logger) {
+    public MoneyTransferServiceImpl(MoneyTransferRepository moneyTransferRepository, OperationCheckerImpl checker,
+                                    TransferLoggerImpl logger) {
         this.moneyTransferRepository = moneyTransferRepository;
         this.checker = checker;
         this.logger = logger;
@@ -36,8 +38,10 @@ public class MoneyTransferServiceImpl implements MoneyTransferService {
 
     @Override
     public ResponseTransfer transferMoney(RequestForMoneyTransfer requestForMoneyTransfer) {
-        Optional<Card> optionalCardFrom = moneyTransferRepository.findCardsInStorage(requestForMoneyTransfer.getCardFromNumber());
-        Optional<Card> optionalCardTo = moneyTransferRepository.findCardsInStorage(requestForMoneyTransfer.getCardToNumber());
+        Optional<Card> optionalCardFrom = moneyTransferRepository
+                .findCardsInStorage(requestForMoneyTransfer.getCardFromNumber());
+        Optional<Card> optionalCardTo = moneyTransferRepository
+                .findCardsInStorage(requestForMoneyTransfer.getCardToNumber());
 
         if (optionalCardFrom.isEmpty() || optionalCardTo.isEmpty()) {
             throwInputDataException(requestForMoneyTransfer, "Введенные данные карт некорректные!");

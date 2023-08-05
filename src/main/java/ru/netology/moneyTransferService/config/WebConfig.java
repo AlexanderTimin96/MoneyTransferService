@@ -7,7 +7,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-    @Value("${origins}")
+    @Value("${cross.origin.host.name}")
     private String origins;
 
     @Override

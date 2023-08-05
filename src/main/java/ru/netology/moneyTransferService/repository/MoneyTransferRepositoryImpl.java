@@ -2,12 +2,10 @@ package ru.netology.moneyTransferService.repository;
 
 import org.springframework.stereotype.Repository;
 import ru.netology.moneyTransferService.exceptions.InputDataException;
-import ru.netology.moneyTransferService.logger.TransferLogger;
 import ru.netology.moneyTransferService.model.card.Card;
 import ru.netology.moneyTransferService.model.operation.TransferOperation;
 import ru.netology.moneyTransferService.model.response.ResponseTransfer;
 
-import javax.swing.text.html.Option;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,10 +36,12 @@ public class MoneyTransferRepositoryImpl implements MoneyTransferRepository {
         cardStorage.put(card4.getNumber(), card3);
     }
 
+    @Override
     public Optional<Card> findCardsInStorage(String number) {
         return Optional.ofNullable(cardStorage.get(number));
     }
 
+    @Override
     public ResponseTransfer saveOperation(TransferOperation transferOperation) {
         moneyTransferOperations.put(operationID.get(), transferOperation);
         return new ResponseTransfer(Integer.toString(operationID.getAndIncrement()));
