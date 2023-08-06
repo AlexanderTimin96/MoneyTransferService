@@ -49,19 +49,19 @@ public class MoneyTransferServiceImpl implements MoneyTransferService {
         Card cardFrom = optionalCardFrom.get();
         Card cardTo = optionalCardTo.get();
 
-        if (!checker.checkDataEntryCard(cardFrom, requestForMoneyTransfer)) {
+        if (!checker.areCardDataCorrect(cardFrom, requestForMoneyTransfer)) {
             String str = "Введенные данные карт некорректные!";
             throwInputDataException(requestForMoneyTransfer, str);
         }
-        if (!checker.checkValidTill(cardFrom)) {
+        if (!checker.isCardValid(cardFrom)) {
             String str = "Срок действия карты отправителя истек!";
             throwInvalidTransactionExceptions(requestForMoneyTransfer, str);
         }
-        if (!checker.checkValidTill(cardTo)) {
+        if (!checker.isCardValid(cardTo)) {
             String str = "Срок действия карты получателя истек!";
             throwInvalidTransactionExceptions(requestForMoneyTransfer, str);
         }
-        if (!checker.checkCurrency(cardFrom, cardFrom)) {
+        if (!checker.areCurrenciesMatch(cardFrom, cardFrom)) {
             String str = "Карты имеют счета в разных валютах!";
             throwInvalidTransactionExceptions(requestForMoneyTransfer, str);
         }
@@ -69,7 +69,7 @@ public class MoneyTransferServiceImpl implements MoneyTransferService {
         TransferOperation operation = new TransferOperation(cardFrom, cardTo,
                 requestForMoneyTransfer.getValue(), COMMISSION);
 
-        if (!checker.checkAmountForReduceValue(operation)) {
+        if (!checker.isEnoughMoney(operation)) {
             String str = "Недостаточно средств для перевода!";
             throwInvalidTransactionExceptions(operation, str);
         }
@@ -82,11 +82,11 @@ public class MoneyTransferServiceImpl implements MoneyTransferService {
         int id = Integer.parseInt(requestForConfirmOperation.getOperationId());
         TransferOperation operation = moneyTransferRepository.findOperation(id);
 
-        if (checker.checkCompleteOperation(operation)) {
+        if (checker.hasOperationBeenPerformed(operation)) {
             String str = "Операция была выполнена ранее!";
             throwInvalidTransactionExceptions(operation, str);
         }
-        if (!checker.checkCode(requestForConfirmOperation.getCode(), CONFIRM_CODE)) {
+        if (!checker.isCodeValid(requestForConfirmOperation.getCode(), CONFIRM_CODE)) {
             String str = "Код подтверждения операции неверный!";
             throwInvalidTransactionExceptions(operation, str);
         }

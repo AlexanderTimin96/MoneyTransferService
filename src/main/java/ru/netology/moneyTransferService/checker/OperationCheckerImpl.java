@@ -11,7 +11,7 @@ import java.util.Date;
 @Component
 public class OperationCheckerImpl implements OperationChecker {
     @Override
-    public boolean checkDataEntryCard(Card card, RequestForMoneyTransfer requestForMoneyTransfer) {
+    public boolean areCardDataCorrect(Card card, RequestForMoneyTransfer requestForMoneyTransfer) {
         if (card.getValidTill().compareTo(requestForMoneyTransfer.getCardFromValidTill()) != 0) {
             return false;
         }
@@ -28,29 +28,29 @@ public class OperationCheckerImpl implements OperationChecker {
     }
 
     @Override
-    public boolean checkValidTill(Card card) {
+    public boolean isCardValid(Card card) {
         Calendar cal = Calendar.getInstance();
         Date today = cal.getTime();
         return card.getValidTill().after(today);
     }
 
     @Override
-    public boolean checkCurrency(Card card1, Card card2) {
+    public boolean areCurrenciesMatch(Card card1, Card card2) {
         return card1.getCurrency().equals(card2.getCurrency());
     }
 
     @Override
-    public boolean checkAmountForReduceValue(TransferOperation operation) {
+    public boolean isEnoughMoney(TransferOperation operation) {
         return operation.getCardFrom().getValue().compareTo(operation.getValueForReduce()) >= 0;
     }
 
     @Override
-    public boolean checkCompleteOperation(TransferOperation operation) {
+    public boolean hasOperationBeenPerformed(TransferOperation operation) {
         return operation.isOperationSuccessful();
     }
 
     @Override
-    public boolean checkCode(String code, String confirmCode) {
+    public boolean isCodeValid(String code, String confirmCode) {
         return code.equals(confirmCode);
     }
 }

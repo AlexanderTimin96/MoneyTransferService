@@ -5,15 +5,15 @@ import ru.netology.moneyTransferService.model.operation.TransferOperation;
 import ru.netology.moneyTransferService.model.request.RequestForMoneyTransfer;
 
 public interface OperationChecker {
-    boolean checkDataEntryCard(Card card, RequestForMoneyTransfer requestForMoneyTransfer);
+    boolean areCardDataCorrect(Card card, RequestForMoneyTransfer requestForMoneyTransfer);
 
-    boolean checkValidTill(Card card);
+    boolean isCardValid(Card card);
 
-    boolean checkCurrency(Card card1, Card card2);
+    boolean areCurrenciesMatch(Card card1, Card card2);
 
-    boolean checkAmountForReduceValue(TransferOperation operation);
+    boolean isEnoughMoney(TransferOperation operation);
 
-    boolean checkCompleteOperation(TransferOperation operation);
+    boolean hasOperationBeenPerformed(TransferOperation operation);
 
-    boolean checkCode(String code, String confirmCode);
+    boolean isCodeValid(String code, String confirmCode);
 }
