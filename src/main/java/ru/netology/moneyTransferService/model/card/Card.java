@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 public class Card {
     private final String number;
@@ -49,5 +50,19 @@ public class Card {
 
     public void reduceValue(BigDecimal value) {
         amount.setValue(amount.getValue().subtract(value));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Card card = (Card) o;
+        return Objects.equals(number, card.number) && Objects.equals(CVC, card.CVC)
+                && Objects.equals(validTill, card.validTill) && Objects.equals(amount, card.amount);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(number, CVC, validTill, amount);
     }
 }

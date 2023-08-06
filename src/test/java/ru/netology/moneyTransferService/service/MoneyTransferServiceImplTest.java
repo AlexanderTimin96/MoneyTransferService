@@ -45,6 +45,8 @@ public class MoneyTransferServiceImplTest {
         when(moneyTransferRepository.findCardsInStorage(data.getNotCorrectRequestForMoneyTransfer().getCardToNumber()))
                 .thenReturn(Optional.of(data.getCorrectCard2()));
 
+        when(checker.areCardDataCorrect(data.getCorrectCard1(), data.getNotCorrectRequestForMoneyTransfer()))
+                .thenReturn(false);
         moneyTransferService.transferMoney(data.getNotCorrectRequestForMoneyTransfer());
     }
 
