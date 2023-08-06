@@ -38,7 +38,7 @@ public class DataForTest {
                 new Amount(new BigDecimal(500_00), "RUR"));
         notCorrectRequestForMoneyTransfer = new RequestForMoneyTransfer("1111111111111111",
                 "01/25", "112", "2222222222222222",
-                new Amount(new BigDecimal(500_00), "RUR"));
+                new Amount(new BigDecimal(5000_00), "RUR"));
     }
 
     public RequestForMoneyTransfer getNotCorrectRequestForMoneyTransfer() {

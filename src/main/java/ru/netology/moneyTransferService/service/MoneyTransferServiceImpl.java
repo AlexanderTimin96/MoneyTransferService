@@ -28,8 +28,8 @@ public class MoneyTransferServiceImpl implements MoneyTransferService {
     private final OperationChecker checker;
     private final TransferLogger logger;
 
-    public MoneyTransferServiceImpl(MoneyTransferRepository moneyTransferRepository, OperationCheckerImpl checker,
-                                    TransferLoggerImpl logger) {
+    public MoneyTransferServiceImpl(MoneyTransferRepository moneyTransferRepository, OperationChecker checker,
+                                    TransferLogger logger) {
         this.moneyTransferRepository = moneyTransferRepository;
         this.checker = checker;
         this.logger = logger;

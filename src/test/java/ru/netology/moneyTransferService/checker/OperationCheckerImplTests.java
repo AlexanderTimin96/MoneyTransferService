@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.netology.moneyTransferService.dataForTest.DataForTest;
 
-public class OperationCheckerTests {
+public class OperationCheckerImplTests {
     OperationChecker checker = new OperationCheckerImpl();
     DataForTest data = new DataForTest();
 

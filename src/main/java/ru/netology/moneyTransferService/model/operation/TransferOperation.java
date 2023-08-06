@@ -3,6 +3,7 @@ package ru.netology.moneyTransferService.model.operation;
 import ru.netology.moneyTransferService.model.card.Card;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class TransferOperation {
     private final Card cardFrom;
@@ -40,5 +41,18 @@ public class TransferOperation {
 
     public void setOperationSuccessful(boolean flag) {
         isOperationSuccessful = flag;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TransferOperation operation = (TransferOperation) o;
+        return isOperationSuccessful == operation.isOperationSuccessful && Objects.equals(cardFrom, operation.cardFrom) && Objects.equals(cardTo, operation.cardTo) && Objects.equals(valueForIncrease, operation.valueForIncrease) && Objects.equals(valueForReduce, operation.valueForReduce);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(cardFrom, cardTo, valueForIncrease, valueForReduce, isOperationSuccessful);
     }
 }
