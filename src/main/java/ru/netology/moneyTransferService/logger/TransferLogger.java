@@ -1,7 +1,7 @@
 package ru.netology.moneyTransferService.logger;
 
 import ru.netology.moneyTransferService.model.operation.TransferOperation;
-import ru.netology.moneyTransferService.model.request.RequestForMoneyTransfer;
+import ru.netology.moneyTransferService.model.DTO.request.RequestForMoneyTransfer;
 
 public interface TransferLogger {
     void createFileLog();

@@ -1,6 +1,6 @@
 package ru.netology.moneyTransferService.model.operation;
 
-import ru.netology.moneyTransferService.model.card.Card;
+import ru.netology.moneyTransferService.model.operation.card.Card;
 
 import java.math.BigDecimal;
 import java.util.Objects;

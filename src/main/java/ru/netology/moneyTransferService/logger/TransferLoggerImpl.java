@@ -3,7 +3,7 @@ package ru.netology.moneyTransferService.logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.netology.moneyTransferService.model.operation.TransferOperation;
-import ru.netology.moneyTransferService.model.request.RequestForMoneyTransfer;
+import ru.netology.moneyTransferService.model.DTO.request.RequestForMoneyTransfer;
 
 import java.io.BufferedWriter;
 import java.io.File;

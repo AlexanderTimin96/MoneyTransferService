@@ -1,4 +1,4 @@
-package ru.netology.moneyTransferService.model.card;
+package ru.netology.moneyTransferService.model.operation.card;
 
 import java.math.BigDecimal;
 import java.text.ParseException;

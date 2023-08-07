@@ -2,9 +2,9 @@ package ru.netology.moneyTransferService.repository;
 
 import org.springframework.stereotype.Repository;
 import ru.netology.moneyTransferService.exceptions.InputDataException;
-import ru.netology.moneyTransferService.model.card.Card;
+import ru.netology.moneyTransferService.model.DTO.response.Response;
 import ru.netology.moneyTransferService.model.operation.TransferOperation;
-import ru.netology.moneyTransferService.model.response.ResponseTransfer;
+import ru.netology.moneyTransferService.model.operation.card.Card;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -15,11 +15,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Repository
 public class MoneyTransferRepositoryImpl implements MoneyTransferRepository {
-    private final Map<String, Card> cardStorage = new HashMap<>();
-    private final Map<Integer, TransferOperation> moneyTransferOperations = new ConcurrentHashMap<>();
-    private final AtomicInteger operationID = new AtomicInteger(1);
+    private final Map<String, Card> cardStorage;
+    private final Map<Integer, TransferOperation> moneyTransferOperations;
+    private final AtomicInteger operationID;
 
-    {
+    public MoneyTransferRepositoryImpl() {
+        cardStorage = new HashMap<>();
+        moneyTransferOperations = new ConcurrentHashMap<>();
+        operationID = new AtomicInteger(1);
+
         Card card1 = new Card("1111111111111111", "01/25", "111", "RUR");
         Card card2 = new Card("2222222222222222", "02/25", "222", "RUR");
         Card card3 = new Card("3333333333333333", "03/23", "333", "RUR");
@@ -42,9 +46,9 @@ public class MoneyTransferRepositoryImpl implements MoneyTransferRepository {
     }
 
     @Override
-    public ResponseTransfer saveOperation(TransferOperation transferOperation) {
+    public Response saveOperation(TransferOperation transferOperation) {
         moneyTransferOperations.put(operationID.get(), transferOperation);
-        return new ResponseTransfer(Integer.toString(operationID.getAndIncrement()));
+        return new Response(Integer.toString(operationID.getAndIncrement()));
     }
 
     @Override

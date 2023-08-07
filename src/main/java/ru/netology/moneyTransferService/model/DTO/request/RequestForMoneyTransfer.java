@@ -1,8 +1,8 @@
-package ru.netology.moneyTransferService.model.request;
+package ru.netology.moneyTransferService.model.DTO.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import ru.netology.moneyTransferService.model.card.Amount;
+import ru.netology.moneyTransferService.model.operation.card.Amount;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;

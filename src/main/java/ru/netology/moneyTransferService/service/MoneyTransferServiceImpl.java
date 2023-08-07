@@ -3,16 +3,14 @@ package ru.netology.moneyTransferService.service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.netology.moneyTransferService.checker.OperationChecker;
-import ru.netology.moneyTransferService.checker.OperationCheckerImpl;
 import ru.netology.moneyTransferService.exceptions.InputDataException;
 import ru.netology.moneyTransferService.exceptions.InvalidTransactionExceptions;
 import ru.netology.moneyTransferService.logger.TransferLogger;
-import ru.netology.moneyTransferService.logger.TransferLoggerImpl;
-import ru.netology.moneyTransferService.model.card.Card;
+import ru.netology.moneyTransferService.model.operation.card.Card;
 import ru.netology.moneyTransferService.model.operation.TransferOperation;
-import ru.netology.moneyTransferService.model.request.RequestForConfirmOperation;
-import ru.netology.moneyTransferService.model.request.RequestForMoneyTransfer;
-import ru.netology.moneyTransferService.model.response.ResponseTransfer;
+import ru.netology.moneyTransferService.model.DTO.request.RequestForConfirmOperation;
+import ru.netology.moneyTransferService.model.DTO.request.RequestForMoneyTransfer;
+import ru.netology.moneyTransferService.model.DTO.response.Response;
 import ru.netology.moneyTransferService.repository.MoneyTransferRepository;
 
 import java.util.Optional;
@@ -37,7 +35,7 @@ public class MoneyTransferServiceImpl implements MoneyTransferService {
     }
 
     @Override
-    public ResponseTransfer transferMoney(RequestForMoneyTransfer requestForMoneyTransfer) {
+    public Response transferMoney(RequestForMoneyTransfer requestForMoneyTransfer) {
         Optional<Card> optionalCardFrom = moneyTransferRepository
                 .findCardsInStorage(requestForMoneyTransfer.getCardFromNumber());
         Optional<Card> optionalCardTo = moneyTransferRepository
@@ -78,7 +76,7 @@ public class MoneyTransferServiceImpl implements MoneyTransferService {
     }
 
     @Override
-    public ResponseTransfer confirmOperation(RequestForConfirmOperation requestForConfirmOperation) {
+    public Response confirmOperation(RequestForConfirmOperation requestForConfirmOperation) {
         int id = Integer.parseInt(requestForConfirmOperation.getOperationId());
         TransferOperation operation = moneyTransferRepository.findOperation(id);
 
@@ -92,7 +90,7 @@ public class MoneyTransferServiceImpl implements MoneyTransferService {
         }
 
         makeMoneyTransfer(operation);
-        return new ResponseTransfer(requestForConfirmOperation.getOperationId());
+        return new Response(requestForConfirmOperation.getOperationId());
     }
 
     private void makeMoneyTransfer(TransferOperation operation) {

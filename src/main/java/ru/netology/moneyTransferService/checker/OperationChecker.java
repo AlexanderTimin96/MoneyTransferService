@@ -1,8 +1,8 @@
 package ru.netology.moneyTransferService.checker;
 
-import ru.netology.moneyTransferService.model.card.Card;
+import ru.netology.moneyTransferService.model.operation.card.Card;
 import ru.netology.moneyTransferService.model.operation.TransferOperation;
-import ru.netology.moneyTransferService.model.request.RequestForMoneyTransfer;
+import ru.netology.moneyTransferService.model.DTO.request.RequestForMoneyTransfer;
 
 public interface OperationChecker {
     boolean areCardDataCorrect(Card card, RequestForMoneyTransfer requestForMoneyTransfer);
