@@ -2,7 +2,7 @@ package ru.netology.moneyTransferService.repository;
 
 import org.springframework.stereotype.Repository;
 import ru.netology.moneyTransferService.exceptions.InputDataException;
-import ru.netology.moneyTransferService.model.DTO.response.Response;
+import ru.netology.moneyTransferService.model.DTO.response.ResponseOperation;
 import ru.netology.moneyTransferService.model.operation.TransferOperation;
 import ru.netology.moneyTransferService.model.operation.card.Card;
 
@@ -46,9 +46,9 @@ public class MoneyTransferRepositoryImpl implements MoneyTransferRepository {
     }
 
     @Override
-    public Response saveOperation(TransferOperation transferOperation) {
+    public ResponseOperation saveOperation(TransferOperation transferOperation) {
         moneyTransferOperations.put(operationID.get(), transferOperation);
-        return new Response(Integer.toString(operationID.getAndIncrement()));
+        return new ResponseOperation(Integer.toString(operationID.getAndIncrement()));
     }
 
     @Override

@@ -6,7 +6,7 @@ import ru.netology.moneyTransferService.dataForTest.DataForTest;
 import ru.netology.moneyTransferService.exceptions.InputDataException;
 import ru.netology.moneyTransferService.model.operation.card.Card;
 import ru.netology.moneyTransferService.model.operation.TransferOperation;
-import ru.netology.moneyTransferService.model.DTO.response.Response;
+import ru.netology.moneyTransferService.model.DTO.response.ResponseOperation;
 
 import java.util.Optional;
 
@@ -29,8 +29,8 @@ public class MoneyTransferRepositoryImplTests {
 
     @Test
     public void saveOperation_withCorrectArguments_test() {
-        Response result = moneyTransferRepository.saveOperation(data.getCorrectTransferOperation());
-        Response expected = new Response("1");
+        ResponseOperation result = moneyTransferRepository.saveOperation(data.getCorrectTransferOperation());
+        ResponseOperation expected = new ResponseOperation("1");
         Assertions.assertEquals(expected, result);
     }
 
@@ -42,7 +42,7 @@ public class MoneyTransferRepositoryImplTests {
     @Test
     public void findOperation_withCorrectArguments_test() {
         TransferOperation expected = data.getCorrectTransferOperation();
-        Response resultSaveOperation = moneyTransferRepository.saveOperation(expected);
+        ResponseOperation resultSaveOperation = moneyTransferRepository.saveOperation(expected);
         int intResultSaveOperation = Integer.parseInt(resultSaveOperation.operationId());
         TransferOperation result = moneyTransferRepository.findOperation(intResultSaveOperation);
         Assertions.assertEquals(expected, result);

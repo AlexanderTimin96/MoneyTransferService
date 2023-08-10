@@ -4,7 +4,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.netology.moneyTransferService.model.DTO.request.RequestForConfirmOperation;
 import ru.netology.moneyTransferService.model.DTO.request.RequestForMoneyTransfer;
-import ru.netology.moneyTransferService.model.DTO.response.Response;
+import ru.netology.moneyTransferService.model.DTO.response.ResponseOperation;
 import ru.netology.moneyTransferService.service.MoneyTransferService;
 
 @RestController
@@ -17,12 +17,12 @@ public class MoneyTransferController {
     }
 
     @PostMapping("transfer")
-    public Response transferMoney(@RequestBody @Validated RequestForMoneyTransfer moneyTransferOperation) {
+    public ResponseOperation transferMoney(@RequestBody @Validated RequestForMoneyTransfer moneyTransferOperation) {
         return moneyTransferService.transferMoney(moneyTransferOperation);
     }
 
     @PostMapping("confirmOperation")
-    public Response confirmOperation(@RequestBody @Validated RequestForConfirmOperation requestForConfirmOperation) {
+    public ResponseOperation confirmOperation(@RequestBody @Validated RequestForConfirmOperation requestForConfirmOperation) {
         return moneyTransferService.confirmOperation(requestForConfirmOperation);
     }
 }

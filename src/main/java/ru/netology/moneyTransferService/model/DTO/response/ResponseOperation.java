@@ -2,12 +2,12 @@ package ru.netology.moneyTransferService.model.DTO.response;
 
 import java.util.Objects;
 
-public record Response(String operationId) {
+public record ResponseOperation(String operationId) {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Response that = (Response) o;
+        ResponseOperation that = (ResponseOperation) o;
         return Objects.equals(operationId, that.operationId);
     }
 

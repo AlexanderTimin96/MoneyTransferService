@@ -2,7 +2,7 @@ package ru.netology.moneyTransferService.dataForTest;
 
 import ru.netology.moneyTransferService.model.DTO.request.RequestForConfirmOperation;
 import ru.netology.moneyTransferService.model.DTO.request.RequestForMoneyTransfer;
-import ru.netology.moneyTransferService.model.DTO.response.Response;
+import ru.netology.moneyTransferService.model.DTO.response.ResponseOperation;
 import ru.netology.moneyTransferService.model.operation.TransferOperation;
 import ru.netology.moneyTransferService.model.operation.card.Amount;
 import ru.netology.moneyTransferService.model.operation.card.Card;
@@ -20,7 +20,7 @@ public class DataForTest {
 
     private final RequestForMoneyTransfer correctRequestForMoneyTransfer;
     private final RequestForMoneyTransfer notCorrectRequestForMoneyTransfer;
-    private final Response responseTransfer;
+    private final ResponseOperation responseTransfer;
     private final RequestForConfirmOperation requestForConfirmOperation;
 
     public DataForTest() {
@@ -30,7 +30,7 @@ public class DataForTest {
         correctCard2.increaseValue(new BigDecimal(1_000_00));
         expiredCard = new Card("3333333333333333", "03/23", "333", "RUR");
         cardWithWrongCurrency = new Card("4444444444444444", "04/25", "444", "EUR");
-        responseTransfer = new Response("1");
+        responseTransfer = new ResponseOperation("1");
         requestForConfirmOperation = new RequestForConfirmOperation("1", "0000");
 
         correctTransferOperation = new TransferOperation(correctCard1, correctCard2,
@@ -47,7 +47,7 @@ public class DataForTest {
                 new Amount(new BigDecimal(5000_00), "RUR"));
     }
 
-    public Response getResponseTransfer() {
+    public ResponseOperation getResponseTransfer() {
         return responseTransfer;
     }
 

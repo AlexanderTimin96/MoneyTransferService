@@ -10,7 +10,7 @@ import ru.netology.moneyTransferService.model.operation.card.Card;
 import ru.netology.moneyTransferService.model.operation.TransferOperation;
 import ru.netology.moneyTransferService.model.DTO.request.RequestForConfirmOperation;
 import ru.netology.moneyTransferService.model.DTO.request.RequestForMoneyTransfer;
-import ru.netology.moneyTransferService.model.DTO.response.Response;
+import ru.netology.moneyTransferService.model.DTO.response.ResponseOperation;
 import ru.netology.moneyTransferService.repository.MoneyTransferRepository;
 
 import java.util.Optional;
@@ -35,7 +35,7 @@ public class MoneyTransferServiceImpl implements MoneyTransferService {
     }
 
     @Override
-    public Response transferMoney(RequestForMoneyTransfer requestForMoneyTransfer) {
+    public ResponseOperation transferMoney(RequestForMoneyTransfer requestForMoneyTransfer) {
         Optional<Card> optionalCardFrom = moneyTransferRepository
                 .findCardsInStorage(requestForMoneyTransfer.getCardFromNumber());
         Optional<Card> optionalCardTo = moneyTransferRepository
@@ -76,7 +76,7 @@ public class MoneyTransferServiceImpl implements MoneyTransferService {
     }
 
     @Override
-    public Response confirmOperation(RequestForConfirmOperation requestForConfirmOperation) {
+    public ResponseOperation confirmOperation(RequestForConfirmOperation requestForConfirmOperation) {
         int id = Integer.parseInt(requestForConfirmOperation.getOperationId());
         TransferOperation operation = moneyTransferRepository.findOperation(id);
 
@@ -90,7 +90,7 @@ public class MoneyTransferServiceImpl implements MoneyTransferService {
         }
 
         makeMoneyTransfer(operation);
-        return new Response(requestForConfirmOperation.getOperationId());
+        return new ResponseOperation(requestForConfirmOperation.getOperationId());
     }
 
     private void makeMoneyTransfer(TransferOperation operation) {

@@ -2,10 +2,10 @@ package ru.netology.moneyTransferService.service;
 
 import ru.netology.moneyTransferService.model.DTO.request.RequestForConfirmOperation;
 import ru.netology.moneyTransferService.model.DTO.request.RequestForMoneyTransfer;
-import ru.netology.moneyTransferService.model.DTO.response.Response;
+import ru.netology.moneyTransferService.model.DTO.response.ResponseOperation;
 
 public interface MoneyTransferService {
-    Response transferMoney(RequestForMoneyTransfer moneyTransferOperation);
+    ResponseOperation transferMoney(RequestForMoneyTransfer moneyTransferOperation);
 
-    Response confirmOperation(RequestForConfirmOperation requestForConfirmOperation);
+    ResponseOperation confirmOperation(RequestForConfirmOperation requestForConfirmOperation);
 }
